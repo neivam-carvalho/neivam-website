@@ -16,12 +16,10 @@ export default function Page() {
           <div className="grid md:grid-cols-3 gap-6">
             <div className="md:col-span-2 text-zinc-300/90 leading-relaxed glass p-6 rounded-xl border border-white/10">
               <p>
-                Olá! Sou {me.nome}, {me.titulo}. Gosto de unir design e engenharia
-                para criar interfaces fluidas, acessíveis e com performance exemplar.
-                Trabalho com React/Next.js, estilização com Tailwind e boas práticas
-                de SEO. Este site adota um visual escuro e minimalista, inspirado
-                pelo seu retrato em alto contraste — foco no essencial e um toque
-                de cor para guiar o olhar.
+                Olá! Sou {me.nome}, {me.titulo}.<br />
+                Sou um profissional de tecnologia que mora em São Paulo, e busco em minha vida o equilíbrio entre opostos que se complementam: lógica e intuição, velocidade e qualidade, inovação e estabilidade.<br />
+                Entendo que é o equilíbrio que gera resultado.<br />
+                Gosto de trabalhar com times multidisciplinares, onde posso aprender e ensinar ao mesmo tempo.
               </p>
             </div>
             <ul className="space-y-3">
