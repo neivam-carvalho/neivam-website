@@ -1,0 +1,199 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo para informações pessoais básicas
+model Profile {
+  id          String   @id @default(cuid())
+  name        String
+  title       String
+  subtitle    String?
+  location    String
+  email       String   @unique
+  bio         String?
+  photoUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  socialLinks SocialLink[]
+  expertise   Expertise[]
+  projects    Project[]
+
+  @@map("profiles")
+}
+
+// Modelo para links sociais
+model SocialLink {
+  id        String   @id @default(cuid())
+  label     String   // LinkedIn, GitHub, Twitter, etc.
+  url       String
+  icon      String?  // Nome do ícone ou URL
+  order     Int      @default(0)
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamento
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+
+  @@map("social_links")
+}
+
+// Modelo para áreas de expertise
+model Expertise {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String?  // Nome do ícone ou emoji
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamento
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+
+  @@map("expertise")
+}
+
+// Modelo para projetos em destaque
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String?
+  projectUrl  String?
+  githubUrl   String?
+  isVisible   Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  profile   Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  tags      ProjectTag[]
+
+  @@map("projects")
+}
+
+// Modelo para tags de tecnologia dos projetos
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?  // Cor hex para display
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamento
+  projects ProjectTag[]
+
+  @@map("tags")
+}
+
+// Tabela de relacionamento many-to-many entre Project e Tag
+model ProjectTag {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relacionamentos
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     String
+
+  @@unique([projectId, tagId])
+  @@map("project_tags")
+}
+
+// Modelo para mensagens de contato
+model ContactMessage {
+  id        String            @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    ContactStatus     @default(UNREAD)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("contact_messages")
+}
+
+// Enum para status das mensagens
+enum ContactStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+// Modelo para analytics básicos
+model PageView {
+  id        String   @id @default(cuid())
+  page      String   // home, contact, etc.
+  userAgent String?
+  ipAddress String?
+  referrer  String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@map("page_views")
+}
+
+// Modelo para tracking de cliques em links/CTAs
+model ClickEvent {
+  id        String   @id @default(cuid())
+  element   String   // linkedin, github, contact-button, etc.
+  page      String   // Página onde ocorreu o clique
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@map("click_events")
+}
+
+// Modelo para configurações gerais do site
+model SiteConfig {
+  id                String   @id @default(cuid())
+  key               String   @unique
+  value             String
+  description       String?
+  isPublic          Boolean  @default(false) // Se pode ser acessado no frontend
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("site_config")
+}
+
+// Modelo para feedback e testimonials (futuro)
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  company   String?
+  content   String
+  rating    Int?     @default(5) // 1-5 stars
+  imageUrl  String?
+  isVisible Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
+}

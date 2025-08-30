@@ -1,4 +1,4 @@
-export const portraitUrl = '/Users/neivamcarvalho/Library/CloudStorage/GoogleDrive-me@neivamcarvalho.com.br/My Drive/13_programacao/websites/neivam/neivam-site/public/images/neivam_black.jpeg';
+export const portraitUrl = '/public/images/neivam_black.jpeg';
 
 export const me = {
   nome: 'Neivam Carvalho',
