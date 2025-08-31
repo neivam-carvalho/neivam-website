@@ -70,19 +70,20 @@ export interface ContactMessage {
   email: string
   subject?: string
   message: string
-  status: ContactStatus
+  status: string // 'UNREAD' | 'READ' | 'REPLIED' | 'ARCHIVED'
   ipAddress?: string
   userAgent?: string
   createdAt: Date
   updatedAt: Date
 }
 
-export enum ContactStatus {
-  UNREAD = 'UNREAD',
-  READ = 'READ',
-  REPLIED = 'REPLIED',
-  ARCHIVED = 'ARCHIVED'
-}
+// Status constants for contact messages
+export const ContactStatus = {
+  UNREAD: 'UNREAD',
+  READ: 'READ',
+  REPLIED: 'REPLIED',
+  ARCHIVED: 'ARCHIVED'
+} as const
 
 export interface PageView {
   id: string
