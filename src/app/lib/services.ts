@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { Profile, ContactMessage, ContactFormData, PageView, ClickEvent } from '@/types'
+import { Profile, ContactMessage, ContactFormData, PageView, ClickEvent } from '../types'
 
 export class ProfileService {
   static async getProfile(): Promise<Profile | null> {
