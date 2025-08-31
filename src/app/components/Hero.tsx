@@ -1,9 +1,9 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { ArrowDown, Mail, Linkedin, Github } from 'lucide-react'
 import { Profile } from '../types'
+import { useIsClient } from '../lib/hooks'
 
 interface HeroProps {
   profile: Profile
@@ -12,96 +12,90 @@ interface HeroProps {
 }
 
 export default function Hero({ profile, onContactClick, onSocialClick }: HeroProps) {
+  const isClient = useIsClient()
+  
   const handleScrollDown = () => {
-    const expertiseSection = document.getElementById('expertise')
-    expertiseSection?.scrollIntoView({ behavior: 'smooth' })
+    if (typeof window !== 'undefined') {
+      const expertiseSection = document.getElementById('expertise')
+      expertiseSection?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 to-neutral-100 px-4">
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Profile Photo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-8"
-        >
-          <div className="relative w-48 h-48 mx-auto mb-6">
-            <Image
-              src={profile.photoUrl || '/images/neivam_black.jpeg'}
-              alt={profile.name}
-              fill
-              className="rounded-full object-cover shadow-2xl ring-4 ring-white"
-              priority
-            />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent" />
-          </div>
-        </motion.div>
+    <section className="relative min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 flex items-center justify-center overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(2,132,199,0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.08),transparent_50%)]" />
 
-        {/* Name and Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6"
+      <div className="relative z-10 container mx-auto px-6 text-center">
+        {/* Profile Image */}
+        <div
+          className="w-32 h-32 mx-auto mb-8 rounded-full overflow-hidden border-4 border-white shadow-2xl"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-neutral-900 mb-4">
+          {profile.photoUrl ? (
+            <Image
+              src={profile.photoUrl}
+              alt={profile.name}
+              width={128}
+              height={128}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-primary-200 flex items-center justify-center">
+              <span className="text-2xl font-bold text-primary-800">
+                {profile.name.split(' ').map(n => n[0]).join('')}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Main Content */}
+        <div
+          className="max-w-4xl mx-auto"
+        >
+          <h1 className="text-5xl md:text-7xl font-bold text-neutral-900 mb-6 leading-tight">
             {profile.name}
           </h1>
-          <h2 className="text-xl md:text-2xl text-primary-600 font-semibold mb-2">
+          
+          <p className="text-2xl md:text-3xl text-primary-700 font-medium mb-4">
             {profile.title}
-          </h2>
+          </p>
+          
           {profile.subtitle && (
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-              "{profile.subtitle}"
+            <p className="text-xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+              {profile.subtitle}
             </p>
           )}
-        </motion.div>
-
-        {/* Location */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mb-8"
-        >
-          <p className="text-neutral-500 text-lg">📍 {profile.location}</p>
-        </motion.div>
+        </div>
 
         {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
+        <div
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
         >
           <button
             onClick={onContactClick}
-            className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-all duration-300 transform hover:scale-105"
           >
-            <Mail size={20} />
-            Entre em Contato
+            <Mail className="w-5 h-5" />
+            Vamos conversar
           </button>
           
-          <a
-            href={`mailto:${profile.email}`}
-            className="inline-flex items-center gap-2 border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-600 hover:text-white transition-all duration-300"
+          <button
+            onClick={handleScrollDown}
+            className="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-lg font-semibold border-2 border-primary-200 hover:border-primary-300 hover:bg-primary-50 transition-all duration-300"
           >
-            Email Direto
-          </a>
-        </motion.div>
+            Ver minha expertise
+            <ArrowDown className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Social Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="flex gap-6 justify-center mb-12"
+        <div
+          className="flex justify-center gap-6"
         >
           {profile.socialLinks.map((link) => {
-            const IconComponent = link.label === 'LinkedIn' ? Linkedin : 
-                                link.label === 'GitHub' ? Github : Mail
+            const IconComponent = link.label.toLowerCase() === 'linkedin' ? Linkedin :
+                               link.label.toLowerCase() === 'github' ? Github : Mail
 
             return (
               <a
@@ -110,28 +104,25 @@ export default function Hero({ profile, onContactClick, onSocialClick }: HeroPro
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => onSocialClick(link.label.toLowerCase())}
-                className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:bg-primary-50"
+                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-neutral-600 hover:text-primary-600 hover:shadow-xl transition-all duration-300 transform hover:scale-110"
               >
-                <IconComponent size={24} className="text-neutral-700 hover:text-primary-600" />
+                <IconComponent className="w-6 h-6" />
               </a>
             )
           })}
-        </motion.div>
+        </div>
 
-        {/* Scroll Down Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="animate-bounce"
+        {/* Scroll Indicator */}
+        <div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
-          <button
+          <button 
             onClick={handleScrollDown}
-            className="text-neutral-400 hover:text-primary-600 transition-colors duration-300"
+            className="animate-bounce text-neutral-400 hover:text-primary-600 transition-colors duration-300"
           >
-            <ArrowDown size={32} />
+            <ArrowDown className="w-6 h-6" />
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

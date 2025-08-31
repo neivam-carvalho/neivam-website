@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -71,11 +70,7 @@ export default function Contact({ profile, onMessageSent }: ContactProps) {
     <section id="contact" className="py-20 px-4 bg-white">
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
@@ -85,15 +80,11 @@ export default function Contact({ profile, onMessageSent }: ContactProps) {
             Tem um projeto em mente? Quer discutir oportunidades? 
             Entre em contato e vamos transformar suas ideias em realidade.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+          <div
             className="space-y-8"
           >
             <div>
@@ -143,14 +134,10 @@ export default function Contact({ profile, onMessageSent }: ContactProps) {
                 Responderei sua mensagem em até 24 horas durante dias úteis.
               </p>
             </div>
-          </motion.div>
+          </div>
 
           {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+          <div
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name */}
@@ -251,28 +238,24 @@ export default function Contact({ profile, onMessageSent }: ContactProps) {
 
               {/* Status Messages */}
               {submitStatus === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <div
                   className="flex items-center gap-2 text-green-600 bg-green-50 p-4 rounded-lg border border-green-200"
                 >
                   <CheckCircle size={20} />
                   <span>Mensagem enviada com sucesso! Responderei em breve.</span>
-                </motion.div>
+                </div>
               )}
 
               {submitStatus === 'error' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <div
                   className="flex items-center gap-2 text-red-600 bg-red-50 p-4 rounded-lg border border-red-200"
                 >
                   <AlertCircle size={20} />
                   <span>Erro ao enviar mensagem. Tente novamente ou use o email direto.</span>
-                </motion.div>
+                </div>
               )}
             </form>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -11,8 +11,15 @@ import { Profile, ContactFormData } from './types'
 export default function HomePage() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const loadProfile = async () => {
       try {
         const profileData = await ProfileService.getProfile()
@@ -32,7 +39,7 @@ export default function HomePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ event: 'pageview', page: 'home' })
     }).catch(console.error)
-  }, [])
+  }, [mounted])
 
   const trackClick = async (element: string) => {
     try {
@@ -48,8 +55,10 @@ export default function HomePage() {
 
   const handleContactClick = () => {
     trackClick('contact-cta')
-    const contactSection = document.getElementById('contact')
-    contactSection?.scrollIntoView({ behavior: 'smooth' })
+    if (typeof window !== 'undefined') {
+      const contactSection = document.getElementById('contact')
+      contactSection?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   const handleSocialClick = (platform: string) => {
@@ -63,6 +72,18 @@ export default function HomePage() {
   const handleMessageSent = (data: ContactFormData) => {
     trackClick('contact-form-submit')
     console.log('Message sent:', data)
+  }
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-neutral-600">Carregando...</p>
+        </div>
+      </div>
+    )
   }
 
   if (loading) {

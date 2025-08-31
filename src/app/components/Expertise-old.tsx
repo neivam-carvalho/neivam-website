@@ -8,6 +8,16 @@ interface ExpertiseProps {
 
 export default function Expertise({ profile }: ExpertiseProps) {
   return (
+    'use client'
+
+import { Profile } from '../types'
+
+interface ExpertiseProps {
+  profile: Profile
+}
+
+export default function Expertise({ profile }: ExpertiseProps) {
+  return (
     <section id="expertise" className="py-24 bg-neutral-50">
       <div className="container mx-auto px-6">
         {/* Title */}
@@ -55,7 +65,7 @@ export default function Expertise({ profile }: ExpertiseProps) {
             Interessado em uma dessas áreas?
           </h3>
           <p className="text-lg text-neutral-600 mb-6">
-            Vamos conversar sobre suas necessidades!
+            Interessado em uma dessas áreas?
           </p>
           <button
             onClick={() => {
